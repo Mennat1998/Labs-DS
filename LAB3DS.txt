@@ -1,0 +1,183 @@
+#include<stdio.h>
+#include<conio.h>
+#include<string.h>
+
+struct employee
+{ int id ;
+  char name[20] ;
+};
+
+struct employee fillemp(void);
+void printemp(struct employee emp);
+struct employee emp[5];
+void bubblesort(int s);
+void merge(int low ,int mid , int high);
+void mergesort(int lb,int ub);
+
+struct employee fillemp(void)
+{
+struct employee emp ;
+
+printf("Enter ID:");
+scanf("%d",&emp.id);
+printf("\n");
+
+printf("Enter name:");
+scanf("%s",emp.name);
+printf("\n");
+
+return emp ;
+}
+
+void printemp(struct employee emp)
+{
+
+printf("ID:%d",emp.id);
+printf("\n");
+printf("name:%s",emp.name);
+printf("\n");
+}
+void bubblesort(int s)
+{ struct employee temp ;
+  int i ; int j ;int sorted =1 ;
+for(i=0;i<s-1 &&sorted ;i++)
+{ sorted=0;
+for(j=0 ;j<s-1-i ;j++)
+{
+if ((emp[j].id)>(emp[j+1].id))
+{temp=emp[j] ;
+ emp[j]=emp[j+1];
+ emp[j+1]=temp ;
+ sorted=1;
+}
+}
+}
+}
+void mergesort(int lb,int ub)
+
+{
+int middle;
+if(lb<ub)
+{
+middle=(lb+ub)/2 ;
+mergesort(lb,middle);
+mergesort(middle+1,ub);
+merge(lb,middle,ub);
+}
+}
+void merge(int low ,int mid , int high )
+{
+struct employee temp[5];
+int list1 ;
+int list2 ;
+int i ;
+int cmp;
+
+list1=low ;
+list2=mid+1;
+i=low ;
+
+while(list1<=mid &&list2<=high)
+{
+cmp=strcmp(emp[list1].name,emp[list2].name);
+if(cmp<=0)
+{temp[i]=emp[list1];
+list1++;
+i++;
+}
+else
+{temp[i]=emp[list2];
+list2++ ;
+i++ ;
+}
+}
+if(list1>mid) //list1 end
+
+{while(list2<=high)
+{
+temp[i]=emp[list2];
+list2++ ;
+i++ ;
+}
+}
+else  //list2 end
+{ while(list1<=mid)
+{
+ temp[i]=emp[list1];
+list1++;
+i++;
+}
+}
+
+for(i=low ;i<=high ;i++)
+{
+emp[i]=temp[i];
+}
+}
+
+int main()
+{ int number;
+  int flag=1 ;
+  int s ;
+  int k,l ;
+  int lb,ub;
+printf("'MY MENU'\n");
+printf(" 1)Add employee \n 2)Print All \n 3)Bubble sort by id \n 4)Merge sort by name \n 5)Exit \n");
+
+
+do{
+printf(" please enter the number you want to press ");
+scanf("%d",&number);
+switch(number)
+{ case 1 :
+     for(k=0;k<5;k++)
+     {
+    emp[k] =fillemp();
+
+     }
+//int z ; globel   z is no of emp user enter
+//emp[z]=fillemp();
+//k++;
+  break ;
+
+  case 2 :
+     for(l=0;l<5;l++) //instead of 5 but z
+     {
+      printemp(emp[l]);
+     }
+  break ;
+
+  case 3 :
+  s=5;         // z instead
+  bubblesort(s);
+  printf("the array is sorted");
+  break;
+  case 4 :
+  mergesort(0,4);      // ub=z-1 ;
+  printf("the array is sorted");
+  break ;
+
+  case 5 : //EXIT
+  flag=0 ;
+  break ;
+
+
+}
+}
+while(flag);
+
+clrscr();
+return 0 ;
+}
+
+
+
+
+
+
+
+
+
+
+
+

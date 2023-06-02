@@ -1,0 +1,356 @@
+#include<stdio.h>
+#include<conio.h>
+#include<alloc.h>
+#include<string.h>
+
+
+struct node
+{
+int id ;
+char name[20];
+struct node* next ;
+struct node* prev;
+};
+
+struct node* phead ;
+struct node* ptail ;
+
+void printall(void);
+struct node* Create_node(int id , char name[20]);
+int Add_node(int  id , char name[20]);
+struct node* Search_by_id(int id);
+struct node* Search_by_name(char name[20]);
+int Delete_by_id(int id);
+int Insert_by_loc(int id ,char name[20],int loc);
+int Update_by_id(int id, int newID );
+void freelist(void);
+
+void printall()
+{
+struct node* NODE ;
+NODE=phead;
+while(NODE!=NULL)
+
+{
+  printf("ID = %d\n",NODE->id);
+  printf("Name = %s\n",NODE->name);
+  NODE=NODE->next ;
+
+}
+   if(phead==NULL)
+  {printf("There is no nodes to be deleted\n");}
+}
+
+struct node* Create_node(int id , char name[20])
+{
+struct node *ptr ;
+ptr=(struct node*) malloc(sizeof (struct node));
+if(ptr!=NULL)
+{
+ptr->id=id ;
+strcpy(ptr->name,name);
+ptr->next=NULL ;
+ptr->prev=NULL ;
+}
+printf("id= %d \n",id);
+printf("name= %s \n",name);
+return ptr ;
+}
+
+
+
+int Add_node(int id , char name[20])
+
+{
+struct node* pcur ;
+int retval=0 ;
+pcur=Create_node(id ,name);
+if(pcur!=NULL)
+{ retval=1 ;
+  if(phead==NULL) //no list
+  { phead=ptail=pcur ;
+  }
+  else
+  {
+    ptail->next=pcur ;
+    pcur->prev=ptail ;
+    ptail=pcur ;
+  }
+}
+ return retval ;
+}
+
+struct node* Search_by_id(int id)
+{ struct node* ptc ;
+  ptc=phead ;
+
+while( ptc!=NULL && ptc->id!=id )
+{ ptc=ptc->next ;}
+
+return ptc ;
+}
+
+
+
+struct node* Search_by_name(char name[20])
+{ struct node* ptc ;
+  ptc=phead ;
+
+while( ptc!=NULL && strcmp(name,name) )
+{ ptc=ptc->next ;}
+
+return ptc ;
+}
+
+
+
+int Insert_by_loc(int id ,char name[20],int loc)
+{
+struct node* ptr , *temp ;
+int retval=0 ;
+int i ;
+
+ptr=Create_node(id,name);
+if(ptr!=NULL)
+{   retval=1 ;
+if(phead==NULL)
+{
+phead=ptail=ptr ;
+}
+else
+{
+if(loc==0)   // in the begining
+{   ptr->next=phead ;
+    phead->prev=ptr;
+    phead=ptr ;
+    }
+else
+{temp=phead ;
+for(i=0 ;i<loc-1 && temp;i++)
+{ temp=temp->next ;}
+  if(temp==ptail || temp==NULL)  //end
+   {
+    ptail->next=ptr ;
+    ptr->prev=ptail ;
+    ptail=ptr ;
+   }
+  else                    //middle
+  {
+     ptr->next = temp->next ;
+     (temp->next)->prev = ptr ;
+     temp->next = ptr ;
+     (ptr->prev)=temp ;
+  }
+
+}
+}
+}
+return retval ;
+}
+
+
+
+int Update_by_id(int id,int newID )
+{
+ struct node *ptr;
+ int retval=0 ;
+ ptr=phead;
+ while(ptr->id!=id && ptr!= NULL)
+ {ptr=ptr->next;
+ }
+ ptr->id=newID ;
+ retval=1;
+
+
+ return retval ;
+}
+
+int Delete_by_id(int id)
+{
+ struct node *ptr;
+ int retval =0 ;
+ ptr=phead;
+ while(ptr->id!=id && ptr!= NULL)
+
+ {  ptr=ptr->next;}
+
+  if(ptr==phead)
+    { (phead->next)->prev=NULL ;
+       phead=phead->next ;
+       free(ptr);
+       retval=1 ;
+    }
+  else
+  {
+      if (ptr==ptail)
+      {(ptail->prev)->next =NULL ;
+	ptail=ptail->prev ;
+	free(ptr);
+	retval=1;
+      }
+      else
+      {
+       (ptr->prev)->next=(ptr->next);
+       (ptr->next)->prev=(ptr->prev);
+       free(ptr);
+	retval=1;
+      }
+
+
+ }
+      return retval ;
+}
+
+
+
+void freelist(void)
+{
+struct node* ptr ;
+while(phead!=NULL)
+
+{ ptr=phead;
+  phead=phead->next ;
+  free(ptr);
+}
+ptail=NULL ;
+}
+
+
+int main()
+{
+int number ;
+int ID ;
+char Name[20];
+int loc ;
+int val ;
+struct node* NODE,*pt ;
+int flag=1 ;
+int newID ;
+
+printf("1)Create node\n");
+printf("2)ADD node\n");
+printf("3)Search by id\n");
+printf("4)Search by name\n");
+printf("5)Insert by id\n");
+printf("6)Delete by id\n");
+printf("7)Update by id\n");
+printf("8)free list\n");
+printf("9)print all\n");
+printf("10)EXIT\n");
+
+do{
+printf("Please enter the number you want to press: ");
+scanf("%d",&number);
+
+
+
+switch(number)
+{
+
+case 1 :
+printf("Enter ID:   \n");
+scanf("%d",&ID);
+printf("Enter Name: \n");
+scanf("%s",Name);
+Create_node(ID,Name);
+break ;
+
+case 2 :  // ADD NODE
+printf("Enter ID:   \n");
+scanf("%d",&ID);
+printf("Enter Name: \n");
+scanf("%s",Name);
+val=Add_node(ID,Name);
+printf("value =  %d",val);
+printf("\n");
+break ;
+
+case 3 : //search by id
+printf("Enter ID:   \n");
+scanf("%d",&ID);
+pt=Search_by_id(ID);
+printf("address =  %p\n",pt);
+if(pt!=NULL)
+{printf("EXISTED\n");}
+else
+{printf("NOT EXISTED\n");}
+break ;
+
+
+case 4: // search by name
+printf("Enter Name:\n");
+scanf("%s",Name);
+pt=Search_by_name(Name);
+printf("address =  %p\n",pt);
+if(pt!=NULL)
+{printf("EXISTED\n");}
+else
+{printf("NOT EXISTED\n");}
+break ;
+
+case 5 :             // insert
+printf("Enter ID:   \n");
+scanf("%d",&ID);
+printf("Enter Name: \n");
+scanf("%s",Name);
+printf("Enter Location:   \n");
+scanf("%d",&loc);
+val=Insert_by_loc(ID,Name,loc);
+printf("value =  %d",val);
+break ;
+
+
+case 6 :        //delete
+printf("Enter ID:   \n");
+scanf("%d",&ID);
+val=Delete_by_id(ID);
+printf("value =  %d",val);
+break ;
+
+
+case 7:           //update
+printf("Enter ID:   \n");
+scanf("%d",&ID);
+printf("Enter newID:   \n");
+scanf("%d",&newID);
+val= Update_by_id (ID,newID);
+printf("value =  %d",val);
+break ;
+
+case 8 :        //free
+freelist();
+printf("all nodes are deleted\n");
+break ;
+
+
+
+case 9 :   //printall nodes
+printall();
+break ;
+case 10 :
+flag=0 ;
+break ;
+}
+}
+while(flag);
+getch();
+clrscr();
+return 0 ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

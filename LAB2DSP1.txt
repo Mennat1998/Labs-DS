@@ -1,0 +1,136 @@
+#include <stdio.h>
+#include<conio.h>
+#include<malloc.h>
+#include<string.h>
+
+struct node
+{
+int id ;
+char name[20];
+struct node* prev ;
+};
+
+struct node* ptail ;
+
+
+void printall(void);
+struct node* Create_node(int id , char name[20]);
+int push (int id,char name[20]);
+struct node* pop(void);
+
+
+void printall()
+{
+struct node* NODE ;
+NODE=ptail;
+while(NODE!=NULL)
+
+{
+  printf("ID = %d\n",NODE->id);
+  printf("Name = %s\n",NODE->name);
+  NODE=NODE->prev ;
+
+}
+   if(ptail==NULL)
+  {printf("There is no nodes to be deleted\n");}
+}
+
+struct node* Create_node(int id , char name[20])
+{
+struct node *ptr ;
+ptr=(struct node*) malloc(sizeof (struct node));
+if(ptr!=NULL)
+{
+ptr->id=id ;
+strcpy(ptr->name,name);
+ptr->prev=NULL ;
+}
+printf("id= %d \n",id);
+printf("name= %s \n",name);
+return ptr ;
+}
+
+int push(int id , char name[20])
+{ struct node* ptr;
+  int retval=0;
+
+ptr=Create_node(id,name);
+if(ptr!=NULL)
+{
+if (ptail==NULL)
+{ptail=ptr ;
+ptail->prev=NULL ;
+retval=1;}
+else
+{ptr->prev=ptail ;
+ptail=ptr ;
+retval=1;}
+}
+return retval ;
+}
+
+
+
+struct node* pop(void)
+{ struct node* temp ;
+  if(ptail!=NULL)
+  {
+  temp=ptail;
+  ptail=ptail->prev ;
+  }
+   else{
+   printf("no nodes existed");
+   }
+  return temp ;
+
+}
+
+
+
+int main()
+{
+int id ;
+char name[20];
+struct node* popp ;
+int flag=1 ;
+int value,ret;
+
+printf(" 1)push \n 2)pop \n 3)print all \n 4)EXIT\n") ;
+do
+{
+printf("please enter the value you want to press: ");
+scanf("%d",&value);
+switch(value)
+{
+case 1: //push
+printf("Enter id :");
+scanf("%d",&id);
+printf("Enter name: ");
+scanf("%s",name);
+ret=push(id,name);
+printf("value is %d:\n",ret);
+printf("the node is added \n");
+
+break ;
+case 2: //pop
+
+popp=pop();
+printf("id : %d\n",popp->id);
+printf("name : %s\n",popp->name);
+
+break ;
+case 3:
+printall();
+break;
+case 4:
+flag=0;
+printf("EXIT");
+break ;
+}
+}
+while(flag);
+
+
+clrscr();
+return 0;
+}

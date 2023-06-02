@@ -1,0 +1,79 @@
+#include<stdio.h>
+#include<conio.h>
+
+
+int array[5];
+int top ;
+
+int inqueue (int data);
+int dequeue(void);
+void printall(void);
+
+
+int inqueue (int data)
+{
+int retval=0 ;
+if(top<5)
+{
+array[top]=data;
+top++ ;
+retval=1 ;
+}
+return retval ;
+}
+
+
+int dequeue(void)
+{ int i ; int retval=-1;
+for(i=0 ;i<top ; i++)
+{array[i]=array[i+1];
+retval=1;}
+top-- ;
+
+return retval;
+}
+void printall(void)
+{ int i ;
+for(i=0 ;i<top ; i++)
+{printf("array[%d] = %d\n",i,array[i]);}
+}
+
+int main()
+{  int number ; int flag=1 ; int data ;
+   int value ;  int val;
+printf("1)inqueue 2)dequeue 3)printall 4)exit\n");
+do
+{
+printf("enter the value you want to press:");
+scanf("%d",&number);
+
+switch(number)
+{
+
+case 1://queue
+
+printf("enter the date: ");
+scanf("%d",&data);
+value=inqueue(data);
+printf("value equals %d\n",value);
+break ;
+
+case 2://inqueue
+val=dequeue();
+printf("val equals %d\n",val);
+break ;
+case 3:// printall
+printall();
+break ;
+
+case 4: //exit
+flag=0 ;
+break ;
+}
+
+}
+while(flag!=0);
+
+clrscr();
+return 0 ;
+}
